@@ -1,0 +1,7 @@
+instancia,metodo,n_atendimentos,tempo_segundos,atribuicoes,backtracks,nos_explorados,resolvida,interrompida_por_limite
+dados/instancias/pequena.json,simples,10,0.0002,10,0,11,True,False
+dados/instancias/pequena.json,aprimorado,10,0.0032,10,0,11,True,False
+dados/instancias/media.json,simples,30,5.7615,200100,200100,200000,False,True
+dados/instancias/media.json,aprimorado,30,0.0304,30,0,31,True,False
+dados/instancias/grande.json,simples,60,8.3749,200471,200471,200000,False,True
+dados/instancias/grande.json,aprimorado,60,0.2108,66,6,62,True,False

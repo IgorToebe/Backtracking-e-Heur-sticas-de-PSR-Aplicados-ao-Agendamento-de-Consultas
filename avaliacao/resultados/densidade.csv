@@ -1,0 +1,9 @@
+instancia,metodo,n_atendimentos,tempo_segundos,atribuicoes,backtracks,nos_explorados,resolvida,interrompida_por_limite
+media_disp=0.55,simples,30,0.0019,30,0,31,True,False
+media_disp=0.55,aprimorado,30,0.8291,30,0,31,True,False
+media_disp=0.40,simples,30,6.6326,200339,200339,200000,False,True
+media_disp=0.40,aprimorado,30,0.2131,30,0,31,True,False
+media_disp=0.25,simples,30,5.491,200100,200100,200000,False,True
+media_disp=0.25,aprimorado,30,0.0297,30,0,31,True,False
+media_disp=0.15,simples,30,6.0115,200065,200065,200000,False,True
+media_disp=0.15,aprimorado,30,0.0116,30,0,31,True,False

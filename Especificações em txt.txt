@@ -1,0 +1,380 @@
+1. Objetivo
+O trabalho tem como objetivo desenvolver uma solução computacional para um
+problema real de planejamento, otimização, alocação ou escalonamento,
+utilizando técnicas de Inteligência Artificial estudadas na disciplina.
+Os estudantes deverão demonstrar capacidade de:
+• compreender um problema do mundo real;
+• transformar o problema em um modelo computacional;
+• identificar variáveis, restrições, estados, vizinhanças e funções de
+avaliação;
+• implementar algoritmos de Inteligência Artificial;
+• comparar diferentes estratégias;
+• avaliar quantitativamente os resultados;
+• desenvolver um software organizado e executável;
+• explicar as decisões adotadas;
+• demonstrar experimentalmente as vantagens e limitações da abordagem
+implementada.
+
+2. Requisitos comuns a todos os trabalhos
+Independentemente do tema, o sistema deverá possuir:
+1. leitura ou geração de uma instância do problema;
+2. representação computacional adequada;
+3. implementação dos algoritmos de Inteligência Artificial;
+4. apresentação da solução encontrada;
+5. cálculo de métricas de desempenho;
+6. possibilidade de executar diferentes instâncias;
+7. pelo menos três tamanhos de problema;
+8. comparação entre estratégias;
+9. tratamento de entradas inválidas;
+10.código organizado em módulos ou classes;
+11.documentação mínima do código;
+12.README explicando como executar o sistema.
+Não é necessário desenvolver uma interface gráfica sofisticada.
+O sistema poderá funcionar por:
+• terminal;
+• interface web simples;
+• interface desktop;
+desde que a solução e os resultados possam ser claramente visualizados durante
+a demonstração.
+
+3. Uso de dados
+Os problemas representam situações reais.
+As equipes deverão utilizar de preferência dados de bases públicas como o
+Kaggle; os dados devem anonimizados. Se justificado adequadamente, podem ser
+criados dados fictícios ou gerados dados aleatoriamente.
+Os dados utilizados deverão estar disponíveis juntamente com o projeto para
+permitir a reprodução dos experimentos.
+
+PARTE II – Solução abordada: PROBLEMAS DE SATISFAÇÃO DE RESTRIÇÕES – PSR
+7. Requisitos específicos para PSR
+As equipes dos temas 7 a 12 deverão representar formalmente o problema como:
+PSR = Variáveis + Domínios + Restrições
+Deverão implementar obrigatoriamente duas versões.
+Versão 1 – Backtracking simples
+Implementação do algoritmo de busca com retrocesso sem heurísticas avançadas.
+Versão 2 – Backtracking aprimorado
+Deverá utilizar obrigatoriamente:
+• MRV – Minimum Remaining Values
+• Forward Checking
+Além disso, deverá utilizar pelo menos uma das seguintes estratégias:
+• Degree Heuristic;
+• Least Constraining Value – LCV;
+• propagação adicional de restrições.
+
+8. Comparação obrigatória – PSR
+A equipe deverá comparar:
+
+Backtracking simples × Backtracking aprimorado
+Deverão ser medidos:
+• tempo de execução;
+• número de atribuições realizadas;
+• número de retrocessos – backtracks;
+• quantidade de estados ou nós explorados.
+O objetivo será mostrar se as heurísticas conseguem reduzir o espaço de busca.
+
+9. INSTÂNCIAS DE TESTE
+Todos os trabalhos deverão possuir três níveis.
+Instância pequena
+Deve permitir acompanhar visualmente o funcionamento do algoritmo.
+Instância média
+Deverá representar uma situação razoavelmente próxima de uma aplicação real.
+Instância grande
+Deverá pressionar o algoritmo e permitir observar diferenças de desempenho.
+Não será necessário que a maior instância seja resolvida instantaneamente.
+Caso algum algoritmo apresente dificuldade significativa, esse comportamento
+deverá ser analisado pela equipe.
+
+10. EXPERIMENTOS
+Os experimentos constituem parte importante do trabalho.
+Não será suficiente afirmar:
+“O algoritmo encontrou uma solução.”
+Os estudantes deverão investigar como e por que o algoritmo encontrou
+determinada solução.
+
+Para PSR
+Deverá existir uma comparação semelhante a:
+Instância Método Tempo Atribuições Backtracks
+Pequena Backtracking
+Pequena Backtracking + heurísticas
+Média Backtracking
+Média Backtracking + heurísticas
+Grande ...
+
+11. ANÁLISE DOS RESULTADOS
+A equipe deverá responder, no mínimo:
+1. O Backtracking conseguiu resolver todas as instâncias?
+2. Quantos retrocessos foram necessários?
+3. MRV reduziu o espaço de busca?
+4. Forward Checking produziu melhoria?
+5. Qual foi a diferença entre as versões?
+6. Como o aumento do número de restrições afetou o problema?
+
+12. ORGANIZAÇÃO DO SOFTWARE
+Considerando tratar-se de estudantes de Engenharia de Software, a qualidade
+estrutural da solução também será avaliada.
+Sugere-se separar componentes como:
+dados/
+modelo/
+algoritmos/
+avaliacao/
+interface/
+testes/
+Não é obrigatório utilizar exatamente essa estrutura.
+Entretanto, deverá existir separação clara entre:
+• modelo do problema;
+• algoritmo de IA;
+• leitura dos dados;
+• apresentação dos resultados.
+Não será considerada uma boa solução um único arquivo contendo todo o
+programa sem organização justificável.
+
+13. TESTES
+O projeto deverá possuir testes para componentes relevantes.
+Deverão ser apresentados pelo menos:
+• testes da função de avaliação ou restrições;
+• testes da geração de vizinhos, quando aplicável;
+• teste de uma instância pequena cuja solução possa ser verificada
+manualmente.
+Poderão ser utilizados testes automatizados.
+
+14. ENTREGA E ENTREGÁVEIS
+Cada equipe deverá entregar os seguintes materiais:
+14.1 Código-fonte e arquivos do projeto
+O projeto deverá conter:
+
+código-fonte;
+dados utilizados;
+instâncias de teste;
+testes;
+README com instruções claras para instalação e execução.
+O trabalho deve ser implementado preferencialmente em Python. O software deverá ser
+executável sem erros no ambiente informado pela equipe.
+14.2 Relatório técnico
+Sugestão de extensão: 4 a 8 páginas, desconsiderando anexos.
+O relatório deverá possuir:
+Introdução;
+descrição do problema real;
+modelagem;
+algoritmos implementados;
+função de avaliação ou restrições;
+experimentos;
+resultados;
+discussão;
+limitações;
+conclusão.
+14.3 Slides da apresentação
+Deverá ser criado um conjunto de slides em formato PDF, contendo, no mínimo:
+Apresentação: universidade, curso, disciplina, título do trabalho, nomes e RAs dos
+integrantes e professor;
+Introdução: descrição e modelagem do problema a ser resolvido;
+Materiais e métodos: plataforma utilizada, características do computador, sistema
+operacional, linguagem de programação, técnicas de IA implementadas e método de
+avaliação;
+Fundamentação: estratégias e heurísticas implementadas;
+Desenvolvimento: visão geral do código, organização do software e demonstração de sua
+execução;
+Resultados e análise;
+Conclusões;
+Referências bibliográficas.
+
+14.4 Demonstração
+O software deverá ser executado durante a apresentação, conforme os requisitos da
+Seção 15.
+14.5 Organização do arquivo para entrega
+O código-fonte, dados, instâncias, testes, README, relatório técnico e slides deverão ser
+reunidos em um único arquivo compactado.
+O arquivo deverá ser nomeado com “iia.t1.” seguido do primeiro nome e das iniciais do
+sobrenome de cada aluno, separados por hífen. Exemplo:
+João Silva e Pedro Paulo → iia.t1.JoaoS-PedroP.zip
+
+15. DEMONSTRAÇÃO OBRIGATÓRIA
+A demonstração deverá utilizar uma instância que não tenha solução previamente
+inserida no programa.
+Durante a demonstração, a equipe deverá mostrar:
+1. dados de entrada;
+2. execução;
+3. solução encontrada;
+4. valor ou qualidade da solução;
+5. métricas do algoritmo.
+O professor poderá solicitar a modificação de um parâmetro simples.
+Exemplos:
+• acrescentar um cliente;
+
+• alterar uma indisponibilidade;
+• modificar a capacidade;
+• trocar o número de equipes;
+• alterar um prazo;
+• modificar a quantidade de servidores.
+O programa deverá recalcular a solução.
+16. APRESENTAÇÃO
+Tempo sugerido:
+15 minutos por equipe.
+Distribuição recomendada:
+3 minutos
+Problema real e modelagem.
+4 minutos
+Algoritmos utilizados.
+3 minutos
+Experimentos e comparação.
+5 minutos
+Demonstração do software.
+Todos os integrantes deverão participar da apresentação.
+
+17. CRITÉRIOS DE AVALIAÇÃO
+Critério Peso
+Modelagem do problema 10%
+Algoritmos e conceitos de IA 20%
+Implementação e qualidade do código 25%
+Experimentos e análise dos resultados 15%
+Demonstração do software 20%
+Apresentação oral 10%
+TOTAL 100%
+
+17.1 Modelagem do problema – 10%
+Será avaliada a capacidade de transformar o problema real em um problema
+computacional.
+Busca Local
+Deverá ficar claro:
+• o que representa uma solução;
+• como a solução inicial é produzida;
+• qual é a vizinhança;
+• qual é a função objetivo.
+PSR
+Deverão ser claramente identificados:
+• variáveis;
+• domínios;
+• restrições.
+
+17.2 Algoritmos e conceitos de IA – 20%
+Será avaliada:
+• implementação correta;
+• adequação ao problema;
+• utilização das heurísticas;
+• compreensão do algoritmo;
+• capacidade de explicar seu funcionamento.
+A equipe deverá ser capaz de explicar partes relevantes do código durante a
+apresentação.
+
+17.3 Implementação e qualidade do código – 25%
+Será considerada:
+• correção;
+• organização;
+• modularização;
+• legibilidade;
+• reutilização;
+• documentação;
+• tratamento de erros;
+
+• qualidade da representação dos dados;
+• facilidade de execução.
+
+17.4 Experimentos e análise – 15%
+Será considerado:
+• planejamento dos experimentos;
+• escolha das métricas;
+• comparação entre algoritmos;
+• qualidade dos resultados;
+• interpretação dos resultados.
+Apresentar tabelas sem discuti-las não será suficiente para receber pontuação
+integral.
+
+17.5 Demonstração – 20%
+A demonstração possui peso elevado porque o trabalho deverá resultar em um
+sistema efetivamente funcional.
+Será avaliada:
+• execução correta;
+• entrada dos dados;
+• geração da solução;
+• clareza dos resultados;
+• funcionamento diante de alteração de parâmetros;
+• correspondência entre algoritmo descrito e sistema executado.
+
+17.6 Apresentação oral – 10%
+Será avaliada:
+• organização;
+• clareza;
+• domínio do trabalho;
+• participação dos integrantes;
+• utilização adequada do tempo;
+• capacidade de responder perguntas.
+
+18. REGRAS PARA UTILIZAÇÃO DE BIBLIOTECAS
+Bibliotecas poderão ser utilizadas para:
+• manipulação de arquivos;
+• geração de gráficos;
+• estruturas de dados;
+• interface;
+• cálculos matemáticos;
+• testes.
+Não será permitido utilizar bibliotecas que resolvam integralmente o problema de
+IA no lugar da implementação dos estudantes.
+Por exemplo, o grupo não poderá simplesmente fornecer o problema para um
+solver de otimização ou PSR e apresentar o resultado.
+Os algoritmos exigidos nesta especificação deverão ser implementados pela
+equipe.
+
+19. UTILIZAÇÃO DE INTELIGÊNCIA ARTIFICIAL GENERATIVA
+Ferramentas de Inteligência Artificial Generativa poderão ser utilizadas como
+apoio.
+Seu uso não substitui o domínio do trabalho.
+Durante a apresentação, qualquer integrante poderá ser solicitado a:
+• explicar uma função;
+• explicar uma estrutura de dados;
+• explicar uma restrição;
+• modificar um parâmetro;
+• explicar uma decisão de implementação.
+Caso a equipe não consiga explicar partes relevantes do próprio projeto, haverá
+redução da pontuação nos critérios:
+• Algoritmos e conceitos de IA;
+• Implementação e qualidade do código.
+
+19.1 Integridade acadêmica
+Será utilizado software de verificação de similaridade. Caso sejam identificados indícios de
+cópia entre trabalhos, os trabalhos envolvidos poderão receber nota 0, conforme análise
+do professor.
+
+TEMA QUE DEVERÁ SER UTILIZADO: 9 Agendamento de consultas/atendimentos PSR
+TEMA 9 – AGENDAMENTO DE CONSULTAS OU ATENDIMENTOS
+Problema
+Uma clínica ou organização precisa distribuir clientes entre profissionais e
+horários.
+O problema também pode representar:
+
+• atendimento psicológico;
+• consultoria;
+• atendimento jurídico;
+• assistência técnica;
+• atendimento acadêmico.
+Dados
+Profissionais
+• especialidade;
+• horários disponíveis.
+Clientes
+• serviço necessário;
+• horários disponíveis;
+• duração do atendimento.
+Salas
+• horários disponíveis;
+• tipo de sala, quando necessário.
+Variáveis
+Cada atendimento solicitado.
+Domínio
+Possíveis combinações:
+profissional + horário + sala
+Restrições obrigatórias
+1. profissional deve possuir especialidade necessária;
+2. profissional não pode atender duas pessoas simultaneamente;
+3. cliente não pode possuir dois atendimentos simultaneamente;
+4. sala não pode ser usada simultaneamente;
+5. disponibilidade deve ser respeitada.
+Instâncias mínimas
+• pequena: 10 atendimentos;
+• média: 30 atendimentos;
+• grande: pelo menos 60 atendimentos.
+Demonstração
+Exibir agenda por:
+• profissional;
+
+• horário;
+• cliente.
+Deverá ser possível verificar visualmente a ausência de conflitos.
