@@ -35,6 +35,33 @@ python -m pip install -r requirements.txt
 
 Requer Python 3.11+ (usa `X | None` e `dict[str, X]` na anotação de tipos).
 
+## Menu interativo (usado na apresentação)
+
+```
+python main.py
+```
+
+Sem argumentos, o programa abre um menu numerado no terminal:
+
+```
+1 - Escolher instância
+2 - Ver dados de entrada
+3 - Executar backtracking simples (sem otimização)
+4 - Executar backtracking aprimorado (com otimização)
+5 - Executar os dois juntos e comparar
+6 - Ver resultados
+7 - Alterar instância
+8 - Rodar testes
+0 - Sair
+```
+
+A instância `dados/instancias/demo.json` já vem carregada. Em "Alterar
+instância" dá para acrescentar cliente, mudar a disponibilidade de um
+profissional, adicionar/remover sala e salvar em arquivo; depois é só
+executar os algoritmos de novo para recalcular.
+
+Os subcomandos abaixo continuam disponíveis para uso direto.
+
 ## Uso
 
 Gerar uma instância sintética (3 tamanhos disponíveis — Seção 9 da

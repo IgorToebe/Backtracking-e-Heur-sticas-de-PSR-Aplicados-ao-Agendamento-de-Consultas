@@ -37,14 +37,16 @@ def resolver(
             atribuicoes[atendimento.id] = (atendimento, valor)
             metricas.atribuicoes += 1
             if rastrear:
-                print(f"  {atendimento.id} -> {valor}  OK")
+                print(f"  {atendimento.id} -> ({valor.descrever(instancia.grade)})  OK")
             resultado = backtrack(atribuicoes, proximos)
             if resultado is not None:
                 return resultado
             del atribuicoes[atendimento.id]
+            if metricas.interrompida_por_limite:
+                return None  # busca abortada: não conta retrocesso nem tenta os demais valores
             metricas.backtracks += 1
             if rastrear:
-                print(f"  {atendimento.id} -> {valor}  FALHOU, retrocede")
+                print(f"  {atendimento.id} -> ({valor.descrever(instancia.grade)})  FALHOU, retrocede")
         return None
 
     inicio = time.perf_counter()

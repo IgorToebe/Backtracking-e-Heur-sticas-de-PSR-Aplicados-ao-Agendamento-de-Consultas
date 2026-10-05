@@ -22,3 +22,12 @@ def test_limite_de_nos_interrompe_sem_travar(instancia_minima):
     assert solucao is None
     assert metricas.interrompida_por_limite is True
     assert metricas.nos_explorados == 1
+
+
+def test_limite_de_nos_nao_infla_metricas(instancia_minima):
+    # Após o limite, a busca deve parar de imediato: sem atribuições/retrocessos
+    # "fantasmas" dos níveis acima continuando a iterar seus valores.
+    _, metricas = resolver(instancia_minima, limite_nos=3)
+    assert metricas.interrompida_por_limite is True
+    assert metricas.atribuicoes == 2
+    assert metricas.backtracks == 0

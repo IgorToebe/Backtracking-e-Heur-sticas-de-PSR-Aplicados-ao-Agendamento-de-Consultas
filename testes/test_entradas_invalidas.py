@@ -48,3 +48,38 @@ def test_especialidade_sem_profissional_gera_dominio_vazio_sem_crash(instancia_m
     assert gerar_dominio(instancia_minima, a1) == []
     problemas = validar_instancia(instancia_minima)
     assert any(p.startswith("AVISO") and "odontologia" in p for p in problemas)
+
+
+def _salvar_demo_alterada(tmp_path, alterar) -> str:
+    with open("dados/instancias/demo.json", encoding="utf-8") as f:
+        dados = json.load(f)
+    alterar(dados)
+    caminho = tmp_path / "alterada.json"
+    caminho.write_text(json.dumps(dados), encoding="utf-8")
+    return str(caminho)
+
+
+@pytest.mark.parametrize(
+    "alterar",
+    [
+        lambda d: d["profissionais"][0].update(horarios_disponiveis=["1", "2"]),
+        lambda d: d["profissionais"][0].update(especialidades="juridico"),
+        lambda d: d["clientes"][0].update(duracao_slots=0),
+        lambda d: d["clientes"][0].update(duracao_slots="2"),
+        lambda d: d["salas"][0].update(horarios_disponiveis=[True]),
+        lambda d: d["grade"].update(dias=-1),
+        lambda d: d["atendimentos"].append(dict(d["atendimentos"][0])),
+    ],
+    ids=["horario_texto", "especialidade_texto", "duracao_zero", "duracao_texto",
+         "horario_booleano", "grade_negativa", "atendimento_duplicado"],
+)
+def test_tipos_invalidos_geram_erro_amigavel(tmp_path, alterar):
+    with pytest.raises(InstanciaInvalidaError):
+        carregar_instancia(_salvar_demo_alterada(tmp_path, alterar))
+
+
+def test_arquivo_fora_de_utf8_gera_erro_amigavel(tmp_path):
+    caminho = tmp_path / "latin1.json"
+    caminho.write_bytes('{"grade": "é"}'.encode("latin-1"))
+    with pytest.raises(InstanciaInvalidaError):
+        carregar_instancia(str(caminho))

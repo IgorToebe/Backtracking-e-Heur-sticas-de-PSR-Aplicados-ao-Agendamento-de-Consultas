@@ -14,11 +14,33 @@ from interface.apresentacao import (
     imprimir_por_horario,
     imprimir_por_profissional,
 )
+from modelo.entidades import Instancia
 from modelo.erros import InstanciaInvalidaError
 from modelo.restricoes import validar_solucao
 
 METODOS = {"simples": backtracking_simples, "aprimorado": backtracking_aprimorado}
 LIMITE_NOS_PADRAO = 200_000
+
+
+def _inteiro_positivo(texto: str) -> int:
+    try:
+        valor = int(texto)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"esperado um inteiro, recebido {texto!r}")
+    if valor <= 0:
+        raise argparse.ArgumentTypeError(f"deve ser maior que zero, recebido {valor}")
+    return valor
+
+
+def _carregar_e_validar(caminho: str) -> Instancia:
+    """Carrega a instância, imprime erros/avisos semânticos e aborta se houver ERRO."""
+    instancia = carregar_instancia(caminho)
+    problemas = validar_instancia(instancia)
+    for p in problemas:
+        print(p)
+    if any(p.startswith("ERRO") for p in problemas):
+        raise InstanciaInvalidaError(f"instância inválida ({caminho}): corrija os erros acima antes de resolver")
+    return instancia
 
 
 def _cmd_gerar_instancia(args: argparse.Namespace) -> None:
@@ -29,13 +51,7 @@ def _cmd_gerar_instancia(args: argparse.Namespace) -> None:
 
 
 def _cmd_resolver(args: argparse.Namespace) -> None:
-    instancia = carregar_instancia(args.instancia)
-    problemas = validar_instancia(instancia)
-    for p in problemas:
-        print(p)
-    if any(p.startswith("ERRO") for p in problemas):
-        print("\ninstância inválida: corrija os erros acima antes de resolver")
-        sys.exit(1)
+    instancia = _carregar_e_validar(args.instancia)
 
     solucao, metricas = METODOS[args.metodo].resolver(instancia, limite_nos=args.limite_nos, rastrear=args.rastrear)
     if solucao is None:
@@ -56,7 +72,7 @@ def _cmd_resolver(args: argparse.Namespace) -> None:
 
 
 def _cmd_comparar(args: argparse.Namespace) -> None:
-    instancias = {caminho: carregar_instancia(caminho) for caminho in args.instancias}
+    instancias = {caminho: _carregar_e_validar(caminho) for caminho in args.instancias}
     linhas = comparar_instancias(instancias, limite_nos=args.limite_nos)
     salvar_csv(linhas, args.saida)
     print(f"{len(linhas)} resultados salvos em {args.saida}\n")
@@ -76,6 +92,11 @@ def main() -> None:
     except AttributeError:
         pass  # streams sem reconfigure (ex.: redirecionadas em alguns ambientes) — segue sem forçar utf-8
 
+    if len(sys.argv) == 1 or sys.argv[1] == "menu":
+        from interface.menu import menu_principal
+        menu_principal()
+        return
+
     parser = argparse.ArgumentParser(prog="main.py", description="Agendamento de consultas/atendimentos (PSR) — Tema 9")
     subparsers = parser.add_subparsers(dest="comando", required=True)
 
@@ -88,13 +109,13 @@ def main() -> None:
     p_resolver = subparsers.add_parser("resolver", help="resolve uma instância e mostra a agenda resultante")
     p_resolver.add_argument("--instancia", required=True)
     p_resolver.add_argument("--metodo", choices=list(METODOS), required=True)
-    p_resolver.add_argument("--limite-nos", type=int, default=LIMITE_NOS_PADRAO, dest="limite_nos")
+    p_resolver.add_argument("--limite-nos", type=_inteiro_positivo, default=LIMITE_NOS_PADRAO, dest="limite_nos")
     p_resolver.add_argument("--rastrear", action="store_true", help="imprime cada tentativa/retrocesso da busca")
     p_resolver.set_defaults(func=_cmd_resolver)
 
     p_comparar = subparsers.add_parser("comparar", help="roda as 2 versões em várias instâncias e salva um CSV comparativo")
     p_comparar.add_argument("--instancias", nargs="+", required=True)
-    p_comparar.add_argument("--limite-nos", type=int, default=LIMITE_NOS_PADRAO, dest="limite_nos")
+    p_comparar.add_argument("--limite-nos", type=_inteiro_positivo, default=LIMITE_NOS_PADRAO, dest="limite_nos")
     p_comparar.add_argument("--saida", default="avaliacao/resultados/comparacao.csv")
     p_comparar.set_defaults(func=_cmd_comparar)
 
@@ -103,6 +124,9 @@ def main() -> None:
         args.func(args)
     except InstanciaInvalidaError as e:
         print(f"erro: {e}")
+        sys.exit(1)
+    except OSError as e:  # ex.: --saida apontando para uma pasta inexistente
+        print(f"erro ao acessar o arquivo {e.filename}: {e.strerror}")
         sys.exit(1)
 
 

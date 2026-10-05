@@ -109,6 +109,6 @@ def validar_solucao(instancia: Instancia, solucao: dict[str, Valor]) -> list[str
             violacoes.append(f"atendimento {atendimento.id} sem valor atribuído")
             continue
         if not consistente(instancia, atendimento, valor, atribuicoes):
-            violacoes.append(f"atendimento {atendimento.id} viola alguma restrição com {valor}")
+            violacoes.append(f"atendimento {atendimento.id} viola alguma restrição com ({valor.descrever(instancia.grade)})")
         atribuicoes[atendimento.id] = (atendimento, valor)
     return violacoes

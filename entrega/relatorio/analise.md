@@ -10,9 +10,9 @@ limite de 200.000 nós) e `avaliacao/resultados/densidade.csv` (tamanho fixo
 |-----------|------------|-----------|-------------|------------|-----------------|-----------|
 | Pequena (10) | Simples    | 0,0002 | 10     | 0       | 11     | Sim |
 | Pequena (10) | Aprimorado | 0,0032 | 10     | 0       | 11     | Sim |
-| Média (30)   | Simples    | 5,76   | 200.100 | 200.100 | 200.000 (limite) | **Não** |
+| Média (30)   | Simples    | 5,76   | 199.999 | 199.976 | 200.000 (limite) | **Não** |
 | Média (30)   | Aprimorado | 0,03   | 30     | 0       | 31     | Sim |
-| Grande (60)  | Simples    | 8,37   | 200.471 | 200.471 | 200.000 (limite) | **Não** |
+| Grande (60)  | Simples    | 8,37   | 199.999 | 199.960 | 200.000 (limite) | **Não** |
 | Grande (60)  | Aprimorado | 0,21   | 66     | 6       | 62     | Sim |
 
 ## 1. O Backtracking simples conseguiu resolver todas as instâncias?
@@ -34,7 +34,7 @@ média e apenas **6** na grande.
 ## 3. MRV reduziu o espaço de busca?
 
 Sim, de forma decisiva. Na instância grande, nós explorados caíram de
-mais de 200.000 (sem solução) para 62 (com solução). No experimento de
+200.000 (limite, sem solução) para 62 (com solução). No experimento de
 densidade, o aprimorado (MRV+FC+LCV) manteve exatamente 31 nós e 0
 retrocessos nas 4 disponibilidades testadas (0,55 a 0,15), enquanto o
 simples só resolveu a disponibilidade mais folgada (0,55) e não convergiu
@@ -49,7 +49,7 @@ propositalmente para expor a diferença: o simples precisa de exatamente
 que isso inviabiliza um atendimento "estreito"; o aprimorado, com forward
 checking, elimina esse valor do domínio do atendimento largo assim que o
 estreito é escolhido primeiro (via MRV) — 0 retrocessos. Esse mesmo efeito,
-em escala maior, explica os 6 retrocessos (contra >200.000) na instância
+em escala maior, explica os 6 retrocessos (contra ~200.000) na instância
 grande real.
 
 ## 5. Qual foi a diferença entre as versões?

@@ -39,6 +39,32 @@ def salvar_instancia(instancia: Instancia, caminho: str) -> None:
         json.dump(dados, f, ensure_ascii=False, indent=2)
 
 
+def _inteiro_positivo(valor, campo: str) -> int:
+    # bool é subclasse de int em Python: sem esse cuidado, `true` no JSON viraria 1
+    if isinstance(valor, bool) or not isinstance(valor, int) or valor <= 0:
+        raise InstanciaInvalidaError(f"{campo} deve ser um inteiro positivo, recebido {valor!r}")
+    return valor
+
+
+def _texto(valor, campo: str) -> str:
+    if not isinstance(valor, str) or not valor:
+        raise InstanciaInvalidaError(f"{campo} deve ser um texto não vazio, recebido {valor!r}")
+    return valor
+
+
+def _horarios(valor, campo: str) -> frozenset[int]:
+    if not isinstance(valor, list) or any(isinstance(s, bool) or not isinstance(s, int) for s in valor):
+        raise InstanciaInvalidaError(f"{campo} deve ser uma lista de inteiros (índices de slot), recebido {valor!r}")
+    return frozenset(valor)
+
+
+def _especialidades(valor, campo: str) -> frozenset[str]:
+    # uma string solta ("juridico") seria aceita por frozenset() e viraria um conjunto de letras
+    if not isinstance(valor, list) or not all(isinstance(e, str) and e for e in valor):
+        raise InstanciaInvalidaError(f"{campo} deve ser uma lista de textos, recebido {valor!r}")
+    return frozenset(valor)
+
+
 def carregar_instancia(caminho: str) -> Instancia:
     try:
         with open(caminho, encoding="utf-8") as f:
@@ -47,28 +73,47 @@ def carregar_instancia(caminho: str) -> Instancia:
         raise InstanciaInvalidaError(f"arquivo de instância não encontrado: {caminho}")
     except json.JSONDecodeError as e:
         raise InstanciaInvalidaError(f"JSON inválido em {caminho}: {e}")
+    except UnicodeDecodeError:
+        raise InstanciaInvalidaError(f"{caminho} não está codificado em UTF-8")
+    except OSError as e:
+        raise InstanciaInvalidaError(f"não foi possível ler {caminho}: {e.strerror}")
 
     try:
-        grade = GradeHoraria(**dados["grade"])
+        g = dados["grade"]
+        grade = GradeHoraria(
+            _inteiro_positivo(g["dias"], "grade.dias"),
+            _inteiro_positivo(g["slots_por_dia"], "grade.slots_por_dia"),
+            _inteiro_positivo(g["minutos_por_slot"], "grade.minutos_por_slot"),
+        )
         profissionais = {
             p["id"]: Profissional(
-                p["id"], p["nome"], frozenset(p["especialidades"]), frozenset(p["horarios_disponiveis"])
+                _texto(p["id"], "profissional.id"), p["nome"],
+                _especialidades(p["especialidades"], f"profissional {p['id']}: especialidades"),
+                _horarios(p["horarios_disponiveis"], f"profissional {p['id']}: horarios_disponiveis"),
             )
             for p in dados["profissionais"]
         }
         clientes = {
             c["id"]: Cliente(
-                c["id"], c["nome"], c["servico_necessario"],
-                frozenset(c["horarios_disponiveis"]), c["duracao_slots"],
+                _texto(c["id"], "cliente.id"), c["nome"],
+                _texto(c["servico_necessario"], f"cliente {c['id']}: servico_necessario"),
+                _horarios(c["horarios_disponiveis"], f"cliente {c['id']}: horarios_disponiveis"),
+                _inteiro_positivo(c["duracao_slots"], f"cliente {c['id']}: duracao_slots"),
             )
             for c in dados["clientes"]
         }
         salas = {
-            s["id"]: Sala(s["id"], s.get("tipo"), frozenset(s["horarios_disponiveis"]))
+            s["id"]: Sala(
+                _texto(s["id"], "sala.id"), s.get("tipo"),
+                _horarios(s["horarios_disponiveis"], f"sala {s['id']}: horarios_disponiveis"),
+            )
             for s in dados["salas"]
         }
-        atendimentos = [Atendimento(a["id"], a["cliente_id"]) for a in dados["atendimentos"]]
-    except (KeyError, TypeError) as e:
+        atendimentos = [
+            Atendimento(_texto(a["id"], "atendimento.id"), _texto(a["cliente_id"], f"atendimento {a['id']}: cliente_id"))
+            for a in dados["atendimentos"]
+        ]
+    except (KeyError, TypeError, AttributeError) as e:
         raise InstanciaInvalidaError(f"estrutura inválida em {caminho}: campo ausente ou tipo incorreto ({e})")
 
     if len(profissionais) != len(dados["profissionais"]):
@@ -77,6 +122,8 @@ def carregar_instancia(caminho: str) -> Instancia:
         raise InstanciaInvalidaError("IDs de clientes duplicados na instância")
     if len(salas) != len(dados["salas"]):
         raise InstanciaInvalidaError("IDs de salas duplicados na instância")
+    if len({a.id for a in atendimentos}) != len(atendimentos):
+        raise InstanciaInvalidaError("IDs de atendimentos duplicados na instância")
 
     return Instancia(grade, profissionais, clientes, salas, atendimentos)
 

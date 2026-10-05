@@ -91,7 +91,7 @@ def resolver(
             atribuicoes[atendimento.id] = (atendimento, valor)
             metricas.atribuicoes += 1
             if rastrear:
-                print(f"  {atendimento.id} -> {valor}  OK")
+                print(f"  {atendimento.id} -> ({valor.descrever(instancia.grade)})  OK")
 
             removidos, sucesso = _forward_check(atendimento, valor, outros, dominios, instancia)
             resultado = backtrack(atribuicoes, outros) if sucesso else None
@@ -101,10 +101,12 @@ def resolver(
             for outro_id, valores_removidos in removidos.items():
                 dominios[outro_id].extend(valores_removidos)
             del atribuicoes[atendimento.id]
+            if metricas.interrompida_por_limite:
+                return None  # busca abortada: não conta retrocesso nem tenta os demais valores
             metricas.backtracks += 1
             if rastrear:
                 motivo = "retrocede" if sucesso else "poda (forward checking)"
-                print(f"  {atendimento.id} -> {valor}  FALHOU, {motivo}")
+                print(f"  {atendimento.id} -> ({valor.descrever(instancia.grade)})  FALHOU, {motivo}")
         return None
 
     inicio = time.perf_counter()
